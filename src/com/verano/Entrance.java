@@ -1,6 +1,5 @@
 package com.verano;
 
-import java.awt.Polygon;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,7 +11,9 @@ import java.util.Date;
 import com.verano.task.CrawlerTask;
 import com.verano.task.IGNTask;
 import com.verano.task.PCGamerTask;
+import com.verano.task.PSNTask;
 import com.verano.task.PolygonTask;
+import com.verano.task.SteamTask;
 import com.verano.task.VGTask;
 
 public class Entrance 
@@ -26,11 +27,28 @@ public class Entrance
 		task_list.add(new PolygonTask());
 		task_list.add(new PCGamerTask());
 		//html code
-		StringBuilder sb_output = new StringBuilder("<h1 style=\"text-align:center\">Crawl Result<h1/>");
+		StringBuilder sb_output = new StringBuilder("<h1 style=\"text-align:center\">Crawl Result</h1>");
 		for(CrawlerTask task : task_list)
 		{
 			sb_output.append(task.newsInfo.getHTMLOutput());
 		}
+		PSNTask psn_jp = new PSNTask("PSN日服");
+		psn_jp.runTask("https://store.playstation.com/ja-jp/grid/PN.CH.JP-PN.CH.MIXED.JP-PSPLUSFREEPLAY/1?SMCID=pscomjp_psplus_webtop_a1"
+				, "https://store.playstation.com/ja-jp/grid/PN.CH.JP-PN.CH.MIXED.JP-CATEGORY00000830/1?SMCID=pscomjp_psplus_webtop_a2");
+		sb_output.append(psn_jp.getOutput());
+		PSNTask psn_us = new PSNTask("PSN美服");
+		psn_us.runTask("https://store.playstation.com/en-us/grid/STORE-MSF77008-PSPLUSFREEGAMES/1"
+				, "https://store.playstation.com/en-us/grid/STORE-MSF77008-PSPLUSDISCOUNTS/1");
+		sb_output.append(psn_us.getOutput());
+		PSNTask psn_hk = new PSNTask("PSN港服");
+		psn_hk.runTask("https://store.playstation.com/zh-hans-hk/grid/STORE-MSF86012-PLUS_FTT_CONTENT/1"
+				, "https://store.playstation.com/zh-hans-hk/grid/STORE-MSF86012-PLUS_DIS_CONTENT/1");
+		sb_output.append(psn_hk.getOutput());
+
+		SteamTask steam = new SteamTask("Steam");
+		steam.runTask("http://store.steampowered.com/search/?specials=1&os=win"
+				, "http://store.steampowered.com/search/?filter=globaltopsellers&os=win");
+		sb_output.append(steam.getOutput());
 		//output
 		File fileDir = new File("./result/");
 		if(!fileDir.exists())
@@ -54,6 +72,7 @@ public class Entrance
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(sb_output.toString().getBytes());
 			fos.flush();
+			fos.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
