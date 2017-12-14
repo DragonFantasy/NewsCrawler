@@ -77,7 +77,7 @@ public class Entrance
 		}
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(sb_output.toString().getBytes());
+			fos.write(sb_output.toString().getBytes("UTF-8"));
 			fos.flush();
 			fos.close();
 		} catch (FileNotFoundException e) {

@@ -18,7 +18,7 @@ public class VGTask extends CrawlerTask
 		for(int i = 0; i < news_list.size(); i++)
 		{
 			SingleNews news = new SingleNews(news_list.get(i).tagName("h2").text()
-					, "http://www.vgtime.com"+news_list.get(i).tagName("a").attr("href"));
+					, "http://www.vgtime.com"+news_list.get(i).tagName("a").child(0).attr("href"));
 			newsInfo.addNews(news);
 		}
 	}
